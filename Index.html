@@ -6,77 +6,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Knockout JS</title>
 </head>
-<body style="display: flex; flex-direction: row;">
-
-    <!--knockoutJs don't allow me to use two object in the same div. I use id to specify which object is related to which div-->
-    <div style="background: orange; width: 200px; height: 300px; font-size: 20px;" id="person-container"> 
-        <label>Person: </label>
-        <h3 data-bind="text: FirstName"></h3>  <!--bind data to FirstName which is a value in Person object-->
-        <h3 data-bind="text: LastName"></h3> 
-        <h3 data-bind="text: Age"></h3>  
+<body>
+    
+    <!---Home page template-->
+    <div>
+        <h3>Templates</h3>
+        <select id="templates" onchange="HandleTemplate(event)">
+            <option value="none">none</option>
+            <option value="one">one</option>
+            <option value="two">two</option>
+            <option value="three">three</option>
+            <option value="four">four</option>
+            <option value="five">five</option>
+        </select>
     </div>
-
-    <div style="background: greenyellow; width: 200px; height: 100px; display: flex;" id="phone-container">
-        <label>Phone:</label>
-        <h3 data-bind="text: phoneNum"></h3>
+    <div id="root">
+        <div data-bind="template: {name: $root.activeTemplate() + '-template'}"></div>
     </div>
     
-    <div id="name-container" style="background: skyblue; width: 200px; height: 100px; display: flex; justify-content: center; flex-direction: column;" id="phone-container">
-        <!--valueUpdate: afterkeydown write input text in real time-->
-        <input type="text" data-bind="value: name, valueUpdate: 'afterkeydown'" placeholder="Enter your name" style="height: 40px;">
-        <h3 data-bind="text: name"></h3>
-    </div>
+    <script type="text/html" id="one-template">
+        <strong>This is template one</strong>
+    </script>
+    <script type="text/html" id="two-template">
+        <strong>This is template two</strong>
+    </script>
+    <script type="text/html" id="three-template">
+        <strong>This is template three</strong>
+    </script>
+    <script type="text/html" id="four-template">
+        <strong>This is template four</strong>
+    </script>
+    <script type="text/html" id="five-template">
+        <strong>This is template five</strong>
+    </script>
 
-
-    <div id="list-container" style="width: 500px; height: 800px; background: darkslategray; color: white; margin: 20px;">
-        <input type="text" data-bind="value: countryName" placeholder="Enter country name" style="height: 40px; width: 80%;">
-        <input type="submit" data-bind="click: addCountry">
-
-        <ul data-bind="foreach: countries">
-            <li data-bind="text: $data"></li>
-        </ul>
-    </div>
-
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="./Knockout.js"></script>
+    <script type='text/javascript' src='//ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.0.js'></script>
     <script>
-
-        var person = { 
-            FirstName: ko.observable(),
-            LastName: ko.observable(),
-            Age: ko.observable(),
-        };  //create object for person
-
-
-        person.FirstName("David");   // push data to object value
-        person.LastName("Petersson");   // push data to object value
-        person.Age(20);   // push data to object value
-        var personContainer = document.querySelector('#person-container');
-        ko.applyBindings(person, personContainer);  // bind data to knockout
-        
-
-        var phoneContainer = document.querySelector('#phone-container');
-        var phone = {phoneNum: ko.observable()};
-        phone.phoneNum("004676 568 78998");
-        ko.applyBindings(phone, phoneContainer);  // bind object to a specific container
-
-        // two way data bind. knockout take the input value and display it to user
-        var nameContainer = document.querySelector('#name-container');
-        var names= {name: ko.observable()};
-        ko.applyBindings(names, nameContainer);
-
-
-        var countryList = {
-            countryName: ko.observable(),  // take the input value
-            countries: ko.observableArray(),  // array
-            addCountry: function addToArray(){  // onclick call addCountry
-                this.countries.push(this.countryName());  // add the input value to array
-            }
+        var viewModel = {};
+        function Init(){
+            viewModel = new viewModel();
+            var root = $("#root")[0];
+            ko.cleanNode(root);
+            ko.applyBindings(viewModel, $("#root")[0]);
         }
 
-        var countryContainer = document.querySelector('#list-container');
-        ko.applyBindings(countryList, countryContainer);
+        // template home page
+        viewModel = function(){
+            var self = this;
+            self.activeTemplate = ko.observable("homePage");
+        }
 
+        // switch template
+        function HandleTemplate(e){
+            e.preventDefault();
+            var selectedTemplate = $("#templates").val();
+            switch(selectedTemplate){
+                case "one":
+                    viewModel.activeTemplate("one");
+                    break;
+                case "two":
+                    viewModel.activeTemplate("two");
+                    break;
+                case "three":
+                    viewModel.activeTemplate("three");
+                    break;
+                case "four":
+                    viewModel.activeTemplate("four");
+                    break;
+                case "five":
+                    viewModel.activeTemplate("five");
+                    break;
+            }
+
+        }
+
+        $(document).ready(function(){
+            Init();
+        });
     </script>
 </body>
 </html>
