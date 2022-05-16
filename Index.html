@@ -4,87 +4,38 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Knockout JS</title>
+    <title>Knockout Js</title>
 </head>
 <body>
-    
-    <!---Home page template-->
-    <div>
-        <h3>Templates</h3>
-        <select id="templates" onchange="HandleTemplate(event)">
-            <option value="none">none</option>
-            <option value="one">one</option>
-            <option value="two">two</option>
-            <option value="three">three</option>
-            <option value="four">four</option>
-            <option value="five">five</option>
-        </select>
+    <div style="background: orange; width:600px; height: 30px; display: flex; justify-content: space-around;">
+        <button onclick="Navigate(event)">Show Template</button>
+        <button onclick="Navigate(event)">Show Component</button>
+        <button onclick="Navigate(event)">Show Simple</button>
+        <button onclick="Navigate(event)">Show Collections</button>
     </div>
-    <div id="root">
-        <div data-bind="template: {name: $root.activeTemplate() + '-template'}"></div>
-    </div>
-    
-    <script type="text/html" id="one-template">
-        <strong>This is template one</strong>
-    </script>
-    <script type="text/html" id="two-template">
-        <strong>This is template two</strong>
-    </script>
-    <script type="text/html" id="three-template">
-        <strong>This is template three</strong>
-    </script>
-    <script type="text/html" id="four-template">
-        <strong>This is template four</strong>
-    </script>
-    <script type="text/html" id="five-template">
-        <strong>This is template five</strong>
-    </script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="./Knockout.js"></script>
-    <script type='text/javascript' src='//ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.0.js'></script>
     <script>
-        var viewModel = {};
-        function Init(){
-            viewModel = new viewModel();
-            var root = $("#root")[0];
-            ko.cleanNode(root);
-            ko.applyBindings(viewModel, $("#root")[0]);
-        }
-
-        // template home page
-        viewModel = function(){
-            var self = this;
-            self.activeTemplate = ko.observable("homePage");
-        }
-
-        // switch template
-        function HandleTemplate(e){
-            e.preventDefault();
-            var selectedTemplate = $("#templates").val();
-            switch(selectedTemplate){
-                case "one":
-                    viewModel.activeTemplate("one");
-                    break;
-                case "two":
-                    viewModel.activeTemplate("two");
-                    break;
-                case "three":
-                    viewModel.activeTemplate("three");
-                    break;
-                case "four":
-                    viewModel.activeTemplate("four");
-                    break;
-                case "five":
-                    viewModel.activeTemplate("five");
-                    break;
+      
+        function Navigate(e){
+            var value = e.currentTarget.innerText;
+            if(value.includes("Template")){
+                location.replace(window.location.origin + '/template.html')
+            }
+            else if(value.includes("Component")){
+                location.replace(window.location.origin + '/component.html')
+            }
+            else if(value.includes("Simple")){
+                location.replace(window.location.origin + '/simple.html')
+            }
+            else if(value.includes("Collections")){
+                location.replace(window.location.origin + '/collections.html')
+            }
+            else{
+                alert('No page found');
             }
 
         }
-
-        $(document).ready(function(){
-            Init();
-        });
     </script>
 </body>
 </html>

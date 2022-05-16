@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template</title>
+</head>
+<body>
+    
+    <!---Knockout Template example with data parameter-->
+    <div>
+        <h1>Templates</h3>
+        <select id="templates" onchange="HandleTemplate(event)"  style="width:500px; padding:15px; font-size: 20px; font-weight:bolder;">
+            <option value="one">one</option>
+            <option value="two">two</option>
+            <option value="three">three</option>
+            <option value="four">four</option>
+            <option value="five">five</option>
+        </select>
+    </div>
+
+    <div id="root">
+        <div data-bind="template: {name: $root.activeTemplate() + '-template', data: names}"></div>
+    </div>
+    
+    <script type="text/html" id="one-template">
+        <h1 data-bind="text:name"></h1>
+    </script>
+    <script type="text/html" id="two-template">
+        <h1 data-bind="text:name"></h1>
+    </script>
+    <script type="text/html" id="three-template">
+        <h1 data-bind="text:name"></h1>
+    </script>
+    <script type="text/html" id="four-template">
+        <h1 data-bind="text:name"></h1>
+    </script>
+    <script type="text/html" id="five-template">
+        <h1 data-bind="text:name"></h1>
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="./Knockout.js"></script>
+    <script>
+        var viewModel = {};
+        function Init(){
+            viewModel = new viewModel();
+            var root = $("#root")[0];
+            ko.cleanNode(root);
+
+            ko.applyBindings(viewModel, $("#root")[0]);  // second parameter optional, makes easy for knockout to quickly find the initial template 
+        }
+
+        var selectedTemplate = $("#templates").val();
+        // template home page
+        viewModel = function(){
+            var self = this;
+            self.activeTemplate = ko.observable("one");  // set default template
+            self.names = {name: 'Welcome to template ' + selectedTemplate};  // pass this message to each template as data
+        }
+
+        // switch template
+        function HandleTemplate(e){
+            e.preventDefault();
+           selectedTemplate = $("#templates").val();  // get selected template name
+           viewModel.names.name = 'Welcome to template ' + selectedTemplate;  // update template name on dropdown change
+
+            switch(selectedTemplate){
+                case "one":
+                    viewModel.activeTemplate("one");
+                    break;
+                case "two":
+                    viewModel.activeTemplate("two");
+                    break;
+                case "three":
+                    viewModel.activeTemplate("three");
+                    break;
+                case "four":
+                    viewModel.activeTemplate("four");
+                    break;
+                case "five":
+                    viewModel.activeTemplate("five");
+                    break;
+            }
+
+        }
+
+        $(document).ready(function(){
+            Init();
+        });
+    </script>
+</body>
+</html>

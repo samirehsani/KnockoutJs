@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component</title>
+</head>
+<body>
+    <h1>Welcome to components</h1>
+    <ul data-bind="foreach: products"> 
+        <li class="product">
+            <strong data-bind="text:name"></strong>
+            <like-widget params="value: userRating"></like-widget>
+        </li>
+    </ul>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="./Knockout.js"></script>
+    <script>
+        $(document).ready(()=>{
+            ko.components.register('like-widget', {
+                 viewModel : function(params){
+                     this.chosenValue = params.value;
+                     this.like = function(){this.chosenValue('like');}.bind(this);
+                     this.dislike = function(){this.chosenValue('dislike');}.bind(this);
+                    },
+                    template: `<div class="like-or-dislike" data-bind="visible: !chosenValue()">\ 
+                        <button data-bind="click: like"> Like it </button> \
+                        <button data-bind="click: dislike">Dislike it</button>\
+                        </div>\
+                        <div class="result" data-bind="visible: chosenValue">\ You <strong data-bind="text: chosenValue"></strong> it\ </div>
+                        `
+            });
+
+            function Product(name, rating){
+                this.name=name;
+                this.userRating= rating;
+            }
+
+            function MyViewModel(){
+                this.products=[
+                    new Product('Garlic bread', 'dislike'),
+                    new Product('Pain au chocolat'),
+                    new Product('Seagull spagetti', 'like'),
+                ];
+            }
+
+            ko.applyBindings(new MyViewModel());
+        });
+    </script>
+</body>
+</html>
